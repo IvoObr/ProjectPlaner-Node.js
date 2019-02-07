@@ -44,6 +44,14 @@ app.post('/projects',  (request, response) => {       // authenticate,
     });
 });
 
+app.get('/projects', (request, response) => {         // authenticate
+    Project.find().then(projectDoc => {               // find({_creator: request.user._id }
+        response.send({projectDoc});
+    }, (error) => {
+        response.status(400).send(error);
+    });
+});
+
  /* User Requests */
 
 app.post('/users', (request, response) => {
