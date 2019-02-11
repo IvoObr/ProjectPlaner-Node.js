@@ -10,7 +10,13 @@ const bcrypt = require('bcryptjs');
 const {auth} = require('../constants/constants');
 
 const UserSchema = new Schema({
-    name: {
+    firstName: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true
+    },
+    lastName: {
         type: String,
         required: true,
         minlength: 1,
@@ -52,7 +58,7 @@ UserSchema.methods.toJSON = function() {
   let user = this;
   let userObj = user.toObject();
 
-  return _.pick(userObj, ['_id', 'email', 'name']);
+  return _.pick(userObj, ['_id', 'email', 'firstName', 'lastName']);
 };
 
 /**
@@ -138,7 +144,7 @@ UserSchema.statics.findByCredentials = function(email, password) {
 
 UserSchema.pre('save', function (next) {
     let user = this;
-    const rounds = 17;
+    const rounds = 5;
 
     if (user.isModified('password')) {
         bcrypt.genSalt(rounds, (error, salt) => {

@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 const _ = require('lodash');
 const colors = require('colors');
+const cors = require('cors');
 
 const {mongoose} = require('./db/mongoose');
 const {Project} = require('./models/project-model');
@@ -18,11 +19,10 @@ const port = process.env.PORT || 3002;
 
 app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+app.use(cors({
+    origin: '*',
+    exposedHeaders: ['x-auth'],
+}));
 
 /* Project Requests */
 
@@ -55,7 +55,7 @@ app.get('/projects', (request, response) => {         // authenticate
  /* User Requests */
 
 app.post('/users', (request, response) => {
-     let body = _.pick(request.body, ['email', 'password', 'name']);
+     let body = _.pick(request.body, ['email', 'password', 'firstName', 'lastName']);
      let user = new User(body);
 
      user.save().then(() => {
@@ -77,7 +77,6 @@ app.post('/users/login', (request, response) => {
    }).catch(error => {
        response.status(400).send();
     });
-
 });
 
 app.delete('/users/token', authenticate, (request, response) => {
