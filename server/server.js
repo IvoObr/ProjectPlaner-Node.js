@@ -26,16 +26,14 @@ app.use(cors({
 
 /* Project Requests */
 
-app.post('/projects',  (request, response) => {       // authenticate,
+app.post('/projects', authenticate, (request, response) => {
     let project = new Project({
         title: request.body.title,
         content: request.body.content,
-        authorFirstName: 'I',                         // request.user.firstName
-        authorLastName: 'O',                          // request.user.lastName
-        // authorId: request.user._id
+        authorFirstName: request.user.firstName,
+        authorLastName: request.user.lastName,
+        authorId: request.user._id
     });
-
-    console.log(project);
 
     project.save().then(projectDoc => {
         response.send({projectDoc});
@@ -44,8 +42,8 @@ app.post('/projects',  (request, response) => {       // authenticate,
     });
 });
 
-app.get('/projects', (request, response) => {         // authenticate
-    Project.find().then(projectDoc => {               // find({_creator: request.user._id }
+app.get('/projects',authenticate, (request, response) => {
+    Project.find({authorId: request.user._id }).then(projectDoc => {
         response.send({projectDoc});
     }, (error) => {
         response.status(400).send(error);

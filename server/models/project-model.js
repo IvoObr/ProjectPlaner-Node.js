@@ -30,7 +30,7 @@ const ProjectSchema = new Schema({
     },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,
-        // required: true
+        required: true
     },
     createdAt: {
         type: Date,
