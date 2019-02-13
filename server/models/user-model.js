@@ -34,6 +34,11 @@ const UserSchema = new Schema({
             message: '{VALUE} is not a valid email'
         }
     },
+    initials: {
+        type: String,
+        required: true,
+        maxlength: 2
+    },
     password: {
         type: String,
         required: true,
@@ -58,7 +63,7 @@ UserSchema.methods.toJSON = function() {
   let user = this;
   let userObj = user.toObject();
 
-  return _.pick(userObj, ['_id', 'email', 'firstName', 'lastName']);
+  return _.pick(userObj, ['_id', 'email', 'firstName', 'lastName', 'initials']);
 };
 
 /**
@@ -144,7 +149,7 @@ UserSchema.statics.findByCredentials = function(email, password) {
 
 UserSchema.pre('save', function (next) {
     let user = this;
-    const rounds = 5;
+    const rounds = 15;
 
     if (user.isModified('password')) {
         bcrypt.genSalt(rounds, (error, salt) => {

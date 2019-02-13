@@ -74,8 +74,8 @@ app.get('/projects/:id', authenticate, (request, response) => {
 
 app.post('/users', (request, response) => {
      let body = _.pick(request.body, ['email', 'password', 'firstName', 'lastName']);
+     body.initials = body.firstName[0] + body.lastName[0];
      let user = new User(body);
-
      user.save().then(() => {
          return user.generateAuthToken();
      }).then((token) => {
