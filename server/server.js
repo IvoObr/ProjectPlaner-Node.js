@@ -66,7 +66,7 @@ app.get('/projects/:id', authenticate, (request, response) => {
 
         response.send({projectDoc});
     }).catch(error => {
-        response.status(400).send();
+        response.status(400).send(error);
     });
 });
 
@@ -93,7 +93,7 @@ app.post('/users/login', (request, response) => {
            response.header(xAuth, token).send({user});
        });
    }).catch(error => {
-       response.status(400).send();
+       response.status(400).send(error);
     });
 });
 
