@@ -70,6 +70,46 @@ app.get('/projects/:id', authenticate, (request, response) => {
     });
 });
 
+app.delete('/projects/:id', authenticate, (request, response) => {
+    let id = request.params.id;
+    if (!ObjectID.isValid(id)) {
+        return response.status(404).send();
+    }
+
+    Project.findOneAndDelete({
+        _id: id,
+        authorId: request.user._id
+    }).then(projectDoc => {
+        if (!projectDoc) {
+            return response.status(404).send();
+        }
+
+        response.send({projectDoc});
+    }).catch(error => {
+        response.status(400).send(error);
+    });
+});
+
+app.patch('/projects/:id', authenticate, (request, response) => {
+    let id = request.params.id;
+    let body = _.pick(request.body, ['title', 'content']);
+    let query = { _id: id, authorId: request.user._id };
+
+    if (!ObjectID.isValid(id)) {
+        return response.status(404).send();
+    }
+
+    Project.findOneAndUpdate(query, {$set: body}, {new: true}).then(projectDoc => {
+        if (!projectDoc) {
+            return response.status(404).send();
+        }
+
+        response.send({projectDoc});
+    }).catch(error => {
+        response.status(400).send(error);
+    });
+});
+
  /* User Requests */
 
 app.post('/users', (request, response) => {
