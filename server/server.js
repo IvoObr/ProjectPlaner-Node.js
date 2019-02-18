@@ -93,6 +93,7 @@ app.delete('/projects/:id', authenticate, (request, response) => {
 app.patch('/projects/:id', authenticate, (request, response) => {
     let id = request.params.id;
     let body = _.pick(request.body, ['title', 'content']);
+    body.createdAt = new Date();
     let query = { _id: id, authorId: request.user._id };
 
     if (!ObjectID.isValid(id)) {
