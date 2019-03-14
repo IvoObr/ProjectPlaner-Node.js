@@ -126,6 +126,15 @@ app.post('/users', (request, response) => {
      });
 });
 
+app.get('/jwt', (req, res) => {
+    let obj = {
+        JWT: process.env.JWT_SECRET,
+        process: process.env
+    }
+
+    res.send(obj)
+});
+
 app.post('/users/login', (request, response) => {
    let body = _.pick(request.body, ['email', 'password']);
 
