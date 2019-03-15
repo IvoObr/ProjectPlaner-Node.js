@@ -72,7 +72,7 @@ UserSchema.methods.toJSON = function() {
 UserSchema.methods.generateAuthToken = function() {
     let user = this;
     let access = auth;
-    let token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
+    let token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET, {expiresIn: '1 day'}).toString();
 
     user.tokens.push({access, token});
 
