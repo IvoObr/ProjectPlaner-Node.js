@@ -20,7 +20,7 @@ const port = process.env.PORT || 3002;
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: '*',
+    origin: 'https://project-planer.herokuapp.com',
     exposedHeaders: ['x-auth'],
 }));
 
